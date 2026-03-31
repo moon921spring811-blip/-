@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>同期メモ</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+</head>
+<body>
+
+<h2>リアルタイム同期メモ</h2>
+<textarea id="memo" style="width:100%;height:300px;"></textarea>
+
+<script>
+// ★ここは自分のFirebase情報に変更する
+const firebaseConfig = {
+  apiKey: "ここ",
+  authDomain: "ここ",
+  databaseURL: "ここ",
+  projectId: "ここ",
+};
+
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// データ取得（同期）
+db.ref("memo").on("value", (snapshot) => {
+  document.getElementById("memo").value = snapshot.val() || "";
+});
+
+// 書き込み（同期）
+document.getElementById("memo").addEventListener("input", (e) => {
+  db.ref("memo").set(e.target.value);
+});
+</script>
+
+</body>
+</html>
