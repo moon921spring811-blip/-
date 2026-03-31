@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>同期メモ</title>
+</head>
+<body>
+
+<h2>リアルタイム同期メモ</h2>
+<textarea id="memo" style="width:100%;height:300px;"></textarea>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBis1DFc-VwRYsfj3ypUsqTX8_j9O_pJ-U",
+  authDomain: "memo-ada98.firebaseapp.com",
+  databaseURL: "https://memo-ada98-default-rtdb.firebaseio.com/",
+  projectId: "memo-ada98",
+  storageBucket: "memo-ada98.firebasestorage.app",
+  messagingSenderId: "169923965635",
+  appId: "1:169923965635:web:816262e53137f710092876",
+  measurementId: "G-L6GTDTHJX3"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const memo = document.getElementById("memo");
+
+// 受信（同期）
+onValue(ref(db, "memo"), (snapshot) => {
+  memo.value = snapshot.val() || "";
+});
+
+// 送信（同期）
+memo.addEventListener("input", () => {
+  set(ref(db, "memo"), memo.value);
+});
+</script>
+
+</body>
+</html>
